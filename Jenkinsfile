@@ -21,12 +21,14 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 sh '''
-                    eval $(minikube -p minikube docker-env)
+                    export DOCKER_TLS_VERIFY=1
+                    export DOCKER_HOST=tcp://192.168.49.2:2376
+                    export DOCKER_CERT_PATH=$HOME/.minikube/certs
+                    export MINIKUBE_ACTIVE_DOCKERD=minikube
                     docker build -t $DOCKER_IMAGE .
                 '''
             }
         }
-
 
         stage('Login to DockerHub') {
             steps {
