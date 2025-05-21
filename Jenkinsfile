@@ -20,9 +20,13 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t $DOCKER_IMAGE .'
+                sh '''
+                    eval $(minikube -p minikube docker-env)
+                    docker build -t $DOCKER_IMAGE .
+                '''
             }
         }
+
 
         stage('Login to DockerHub') {
             steps {
